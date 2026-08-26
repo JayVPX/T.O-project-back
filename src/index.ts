@@ -1,21 +1,26 @@
-import { config } from "dotenv";
+import "dotenv/config";
+
 import express from "express";
 import { MongoClient } from "./databases/mongo.js";
 import accountRoutes from "./routes/account.routes.js";
+import { PostgresClient } from "./databases/postgree.js";
 
 const main = async () => {
-  config();
   const app = express();
   const port = process.env.PORT;
+
   app.use(express.json());
 
-  await MongoClient.connect();
+  await PostgresClient.query("SELECT 1");
 
-  // Accounts Routes
+  console.log("PostgreSQL conectado");
+
+  // await MongoClient.connect();
+
   app.use("/api/account", accountRoutes);
 
   app.listen(port, () => {
-    console.log("Online babys na porta: ", port);
+    console.log("Ouvindo:", port);
   });
 };
 
