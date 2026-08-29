@@ -1,4 +1,4 @@
-import type { IRegisterRepository } from "../../../controllers/account/register/protocols.js";
+import type { IRegisterRepository } from "../../../controllers/auth/register/protocols.js";
 import type { CreateUserModel, UserModel } from "../../../models/user.model.js";
 import { PostgresClient } from "../../../databases/postgree.js";
 

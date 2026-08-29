@@ -7,6 +7,10 @@ export interface IRegisterController {
   ): Promise<HttpResponse<UserModel>>;
 }
 
+export interface IRegisterUseCase {
+  execute(params: CreateUserModel): Promise<UserModel>;
+}
+
 export interface IRegisterRepository {
   register(params: CreateUserModel): Promise<UserModel>;
 }

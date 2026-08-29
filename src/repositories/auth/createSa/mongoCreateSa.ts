@@ -1,15 +1,14 @@
-import { hash } from "crypto";
-import type { IRegisterRepository } from "../../../controllers/account/register/protocols.js";
-import { MongoClient } from "../../../databases/mongo.js";
+import type { ICreateSaRepository } from "../../../controllers/auth/createSuperAdmin/protocols.js";
 import type { CreateUserModel, UserModel } from "../../../models/user.model.js";
+import { MongoClient } from "../../../databases/mongo.js";
 
-export class MongoRegisterRepository implements IRegisterRepository {
+export class MongoCreateSaRepository implements ICreateSaRepository {
   async register(params: CreateUserModel): Promise<UserModel> {
     // const passwordHash = await hash(params.password);
 
     const { insertedId } = await MongoClient.db
       .collection("users")
-      .insertOne({ ...params, role: "USER" });
+      .insertOne({ ...params, role: "ADMIN" });
 
     const user = await MongoClient.db
       .collection<Omit<UserModel, "id">>("users")
