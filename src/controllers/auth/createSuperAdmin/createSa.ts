@@ -1,12 +1,15 @@
 import type { HttpRequest, HttpResponse } from "../../../interfaces/http.js";
-import type { CreateUserModel, UserModel } from "../../../models/user.model.js";
+import type {
+  CreateUserModelDto,
+  UserModelDto,
+} from "../../../models/user.model.js";
 import type { ICreateSaController, ICreateSaRepository } from "./protocols.js";
 
 export class CreateSaController implements ICreateSaController {
   constructor(private readonly createSaRepository: ICreateSaRepository) {}
   async handle(
-    httpRequest: HttpRequest<CreateUserModel>,
-  ): Promise<HttpResponse<UserModel>> {
+    httpRequest: HttpRequest<CreateUserModelDto>,
+  ): Promise<HttpResponse<UserModelDto>> {
     try {
       if (!httpRequest.body) {
         return { body: "deu erro", statusCode: 400 };

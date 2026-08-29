@@ -1,4 +1,4 @@
-export interface UserModel {
+export interface UserModelDto {
   id: string;
   firstName: string;
   lastName: string;
@@ -7,7 +7,7 @@ export interface UserModel {
   role: UserRole;
 }
 
-export interface CreateUserModel {
+export interface CreateUserModelDto {
   firstName: string;
   lastName: string;
   email: string;

@@ -1,12 +1,15 @@
 import type {
-  IRegisterRepository,
   IRegisterUseCase,
-} from "../../controllers/auth/register/protocols.js";
-import type { CreateUserModel, UserModel } from "../../models/user.model.js";
+  IRegisterRepository,
+} from "../../../controllers/auth/register/protocols.js";
+import type {
+  CreateUserModelDto,
+  UserModelDto,
+} from "../../../models/user.model.js";
 
 export class RegisterUseCase implements IRegisterUseCase {
   constructor(private readonly registerRepository: IRegisterRepository) {}
-  async execute(params: CreateUserModel): Promise<UserModel> {
+  async execute(params: CreateUserModelDto): Promise<UserModelDto> {
     const user = await this.registerRepository.register(params);
 
     return user;

@@ -1,12 +1,15 @@
 import type { HttpRequest, HttpResponse } from "../../../interfaces/http.js";
-import type { CreateUserModel, UserModel } from "../../../models/user.model.js";
+import type {
+  CreateUserModelDto,
+  UserModelDto,
+} from "../../../models/user.model.js";
 
 export interface ICreateSaController {
   handle(
-    httpRequest: HttpRequest<CreateUserModel>,
-  ): Promise<HttpResponse<UserModel>>;
+    httpRequest: HttpRequest<CreateUserModelDto>,
+  ): Promise<HttpResponse<UserModelDto>>;
 }
 
 export interface ICreateSaRepository {
-  register(params: CreateUserModel): Promise<UserModel>;
+  register(params: CreateUserModelDto): Promise<UserModelDto>;
 }

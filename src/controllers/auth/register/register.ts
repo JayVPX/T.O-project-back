@@ -3,7 +3,10 @@ import type {
   HttpResponse,
   HttpStatusCode,
 } from "../../../interfaces/http.js";
-import type { CreateUserModel, UserModel } from "../../../models/user.model.js";
+import type {
+  CreateUserModelDto,
+  UserModelDto,
+} from "../../../models/user.model.js";
 import type {
   IRegisterController,
   IRegisterRepository,
@@ -13,8 +16,8 @@ import type {
 export class RegisterController implements IRegisterController {
   constructor(private readonly registerUseCase: IRegisterUseCase) {}
   async handle(
-    httpRequest: HttpRequest<CreateUserModel>,
-  ): Promise<HttpResponse<UserModel>> {
+    httpRequest: HttpRequest<CreateUserModelDto>,
+  ): Promise<HttpResponse<UserModelDto>> {
     try {
       if (!httpRequest.body) {
         return { body: "deu erro", statusCode: 400 };

@@ -1,9 +1,12 @@
 import type { ICreateSaRepository } from "../../../controllers/auth/createSuperAdmin/protocols.js";
-import type { CreateUserModel, UserModel } from "../../../models/user.model.js";
 import { MongoClient } from "../../../databases/mongo.js";
+import type {
+  CreateUserModelDto,
+  UserModelDto,
+} from "../../../models/user.model.js";
 
 export class MongoCreateSaRepository implements ICreateSaRepository {
-  async register(params: CreateUserModel): Promise<UserModel> {
+  async register(params: CreateUserModelDto): Promise<UserModelDto> {
     // const passwordHash = await hash(params.password);
 
     const { insertedId } = await MongoClient.db
@@ -11,7 +14,7 @@ export class MongoCreateSaRepository implements ICreateSaRepository {
       .insertOne({ ...params, role: "ADMIN" });
 
     const user = await MongoClient.db
-      .collection<Omit<UserModel, "id">>("users")
+      .collection<Omit<UserModelDto, "id">>("users")
       .findOne({ _id: insertedId });
 
     if (!user) {

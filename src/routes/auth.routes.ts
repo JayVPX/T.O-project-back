@@ -5,16 +5,16 @@ import { CreateSaController } from "../controllers/auth/createSuperAdmin/createS
 import { MongoCreateSaRepository } from "../repositories/auth/createSa/mongoCreateSa.js";
 import { PostgresClient } from "../databases/postgree.js";
 import { PostgresRegisterRepository } from "../repositories/auth/register/postgresRegister.js";
-import { RegisterUseCase } from "../services/auth/registerUseCase.js";
+import { RegisterUseCase } from "../services/auth/register/registerUseCase.js";
 
 const router = Router();
 
+const registerRepository = new PostgresRegisterRepository();
+const registerUseCase = new RegisterUseCase(registerRepository);
+const registerController = new RegisterController(registerUseCase);
+
 // Register
 router.post("/register", async (req, res) => {
-  const registerRepository = new PostgresRegisterRepository();
-  const registerUseCase = new RegisterUseCase(registerRepository);
-  const registerController = new RegisterController(registerUseCase);
-
   const response = await registerController.handle({
     body: req.body,
   });

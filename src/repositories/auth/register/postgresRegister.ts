@@ -1,9 +1,12 @@
 import type { IRegisterRepository } from "../../../controllers/auth/register/protocols.js";
-import type { CreateUserModel, UserModel } from "../../../models/user.model.js";
 import { PostgresClient } from "../../../databases/postgree.js";
+import type {
+  CreateUserModelDto,
+  UserModelDto,
+} from "../../../models/user.model.js";
 
 export class PostgresRegisterRepository implements IRegisterRepository {
-  async register(params: CreateUserModel): Promise<UserModel> {
+  async register(params: CreateUserModelDto): Promise<UserModelDto> {
     try {
       const { rows } = await PostgresClient.query(
         `
