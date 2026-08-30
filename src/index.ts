@@ -2,6 +2,7 @@ import "dotenv/config";
 
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
+import appointmentsRoutes from "./routes/appointments.routes.js";
 import { PostgresClient } from "./databases/postgree.js";
 
 const main = async () => {
@@ -17,6 +18,7 @@ const main = async () => {
   // await MongoClient.connect();
 
   app.use("/api/auth", authRoutes);
+  app.use("/api/appointments", appointmentsRoutes);
 
   app.listen(port, () => {
     console.log("Ouvindo:", port);
