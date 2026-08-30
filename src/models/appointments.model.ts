@@ -1,7 +1,7 @@
 // Retornado nos Gets
 export interface AppointmentDTO {
   id: string;
-  date: Date;
+  date: Date | string;
   user: {
     id: string;
     name: string;
