@@ -8,6 +8,9 @@ import { GetAllAppointmentUseCase } from "../services/appointments/get/getAllApp
 import { GetOneAppointmentController } from "../controllers/appointments/get/getOneAppointment.js";
 import { GetOneAppointmentUseCase } from "../services/appointments/get/getOneAppointmentUseCase.js";
 import { PostgresGetOneAppointment } from "../repositories/appointments/get/postgresGetOne.js";
+import { GetUserAppointmentsController } from "../controllers/appointments/get/getUseRAppointments.js";
+import { PostgresGetUserAppointments } from "../repositories/appointments/get/postgresGetUserAppointments.js";
+import { GetUserAppointmentsUseCase } from "../services/appointments/get/getUserAppointmentUseCase.js";
 
 const router = Router();
 
@@ -52,6 +55,24 @@ router.get("/get/:id", async (req, res) => {
   );
 
   const response = await getOneAppointmentController.handle({
+    params: req.params.id,
+  });
+
+  const { body, statusCode } = response;
+
+  res.status(statusCode).send(body);
+});
+
+router.get("/user/:id", async (req, res) => {
+  const getUserAppointmentsRepository = new PostgresGetUserAppointments();
+  const getUserAppointmentsUseCase = new GetUserAppointmentsUseCase(
+    getUserAppointmentsRepository,
+  );
+  const getUserAppointmentsController = new GetUserAppointmentsController(
+    getUserAppointmentsUseCase,
+  );
+
+  const response = await getUserAppointmentsController.handle({
     params: req.params.id,
   });
 

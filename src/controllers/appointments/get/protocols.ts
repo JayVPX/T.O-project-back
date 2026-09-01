@@ -22,3 +22,18 @@ export interface IGetAllAppointmentUseCase {
 export interface IGetAllAppointmentRepository {
   getAll(): Promise<AppointmentDTO[]>;
 }
+
+//GetUserAppointments
+export interface IGetUserAppointmentsController {
+  handle(
+    httpRequest: HttpRequest<any>,
+  ): Promise<HttpResponse<AppointmentDTO[]>>;
+}
+
+export interface IGetUserAppointmentUseCase {
+  execute(params: { id: string }): Promise<AppointmentDTO[]>;
+}
+
+export interface IGetUserAppointmentRepository {
+  getUserAppointments(params: { id: string }): Promise<AppointmentDTO[]>;
+}
