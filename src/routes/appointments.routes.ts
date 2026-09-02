@@ -7,10 +7,10 @@ import { GetAllAppointmentController } from "../controllers/appointments/get/get
 import { GetAllAppointmentUseCase } from "../services/appointments/get/getAllAppointmentUseCase.js";
 import { GetOneAppointmentController } from "../controllers/appointments/get/getOneAppointment.js";
 import { GetOneAppointmentUseCase } from "../services/appointments/get/getOneAppointmentUseCase.js";
-import { PostgresGetOneAppointment } from "../repositories/appointments/get/postgresGetOne.js";
-import { GetUserAppointmentsController } from "../controllers/appointments/get/getUseRAppointments.js";
 import { PostgresGetUserAppointments } from "../repositories/appointments/get/postgresGetUserAppointments.js";
+import { PostgresGetOneAppointment } from "../repositories/appointments/get/postgresGetOne.js";
 import { GetUserAppointmentsUseCase } from "../services/appointments/get/getUserAppointmentUseCase.js";
+import { GetUserAppointmentsController } from "../controllers/appointments/get/getUserAppointments.js";
 
 const router = Router();
 
@@ -31,6 +31,7 @@ router.post("/create", async (req, res) => {
 });
 
 router.get("/get", async (req, res) => {
+  console.log("Chamou em");
   const getAllAppointmentRepository = new PostgresGetAllAppointment();
   const getAllAppointmentUseCase = new GetAllAppointmentUseCase(
     getAllAppointmentRepository,

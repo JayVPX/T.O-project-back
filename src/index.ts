@@ -4,10 +4,18 @@ import express from "express";
 import authRoutes from "./routes/auth.routes.js";
 import appointmentsRoutes from "./routes/appointments.routes.js";
 import { PostgresClient } from "./databases/postgree.js";
+import cors from "cors";
 
 const main = async () => {
   const app = express();
+  const allowedOrigins = ["http://localhost:5173"];
   const port = process.env.PORT;
+
+  app.use(
+    cors({
+      origin: allowedOrigins,
+    }),
+  );
 
   app.use(express.json());
 
