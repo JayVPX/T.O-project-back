@@ -41,7 +41,7 @@ export class PostgresCreateAppointmentRepository implements ICreateAppointmentRe
 
       return {
         id: appointment.id,
-        scheduleAt: appointment.date,
+        scheduleAt: appointment.scheduled_at,
         status: appointment.status,
         responsible: {
           id: appointment.responsible_id,

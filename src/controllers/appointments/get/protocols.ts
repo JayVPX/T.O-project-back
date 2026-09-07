@@ -12,28 +12,28 @@ export interface IGetOneAppointmentRepository {
   getOne(params: { id: string }): Promise<AppointmentDTO>;
 }
 
-//GetAll
-export interface IGetAllAppointmentController {
+//GetActive
+export interface IGetActiveAppointmentController {
   handle(): Promise<HttpResponse<AppointmentDTO[]>>;
 }
-export interface IGetAllAppointmentUseCase {
+export interface IGetActiveAppointmentUseCase {
   execute(): Promise<AppointmentDTO[]>;
 }
-export interface IGetAllAppointmentRepository {
-  getAll(): Promise<AppointmentDTO[]>;
+export interface IGetActiveAppointmentRepository {
+  getActive(): Promise<AppointmentDTO[]>;
 }
 
-//GetUserAppointments
-export interface IGetUserAppointmentsController {
+//GetPatientAppointments
+export interface IGetPatientAppointmentsController {
   handle(
     httpRequest: HttpRequest<any>,
   ): Promise<HttpResponse<AppointmentDTO[]>>;
 }
 
-export interface IGetUserAppointmentUseCase {
+export interface IGetPatientAppointmentUseCase {
   execute(params: { id: string }): Promise<AppointmentDTO[]>;
 }
 
-export interface IGetUserAppointmentRepository {
-  getUserAppointments(params: { id: string }): Promise<AppointmentDTO[]>;
+export interface IGetPatientAppointmentRepository {
+  getPatientAppointments(params: { id: string }): Promise<AppointmentDTO[]>;
 }

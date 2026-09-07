@@ -1,12 +1,12 @@
 import type { HttpRequest, HttpResponse } from "../../../interfaces/http.js";
 import type { AppointmentDTO } from "../../../models/appointments.model.js";
 import type {
-  IGetUserAppointmentsController,
-  IGetUserAppointmentUseCase,
+  IGetPatientAppointmentsController,
+  IGetPatientAppointmentUseCase,
 } from "./protocols.js";
 
-export class GetUserAppointmentsController implements IGetUserAppointmentsController {
-  constructor(private readonly useCase: IGetUserAppointmentUseCase) {}
+export class GetPatientAppointmentsController implements IGetPatientAppointmentsController {
+  constructor(private readonly useCase: IGetPatientAppointmentUseCase) {}
   async handle(
     httpRequest: HttpRequest<any>,
   ): Promise<HttpResponse<AppointmentDTO[]>> {

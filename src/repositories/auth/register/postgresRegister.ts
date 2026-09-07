@@ -10,8 +10,8 @@ export class PostgresRegisterRepository implements IRegisterRepository {
     try {
       const { rows } = await PostgresClient.query(
         `
-        INSERT INTO users (
-          cpf,
+        INSERT INTO 'USER' (
+          cellphone,
           email,
           first_name,
           last_name,
@@ -21,14 +21,14 @@ export class PostgresRegisterRepository implements IRegisterRepository {
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING
           id,
-          cpf,
+          cellphone,
           email,
           first_name,
           last_name,
           role
       `,
         [
-          params.cpf,
+          params.cellphone,
           params.email,
           params.firstName,
           params.lastName,
@@ -45,8 +45,8 @@ export class PostgresRegisterRepository implements IRegisterRepository {
 
       return {
         id: user.id,
-        cpf: user.cpf,
         email: user.email,
+        cellphone: user.cellphone,
         firstName: user.first_name,
         lastName: user.last_name,
         role: user.role,

@@ -3,7 +3,7 @@ export interface UserModelDto {
   firstName: string;
   lastName: string;
   email: string;
-  cpf: string;
+  cellphone: string;
   role: UserRole;
 }
 
@@ -11,7 +11,7 @@ export interface CreateUserModelDto {
   firstName: string;
   lastName: string;
   email: string;
-  cpf: string;
+  cellphone: string;
   password: string;
 }
 
