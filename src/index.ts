@@ -2,6 +2,7 @@ import "dotenv/config";
 
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
+import patientsRoutes from "./routes/patients.routes.js";
 import appointmentsRoutes from "./routes/appointments.routes.js";
 import { PostgresClient } from "./databases/postgree.js";
 import cors from "cors";
@@ -27,6 +28,7 @@ const main = async () => {
 
   app.use("/api/auth", authRoutes);
   app.use("/api/appointments", appointmentsRoutes);
+  app.use("/api/patients", patientsRoutes);
 
   app.listen(port, () => {
     console.log("Ouvindo:", port);
