@@ -11,9 +11,9 @@ export interface IRegisterController {
 }
 
 export interface IRegisterUseCase {
-  execute(params: CreateUserModelDto): Promise<UserModelDto>;
+  execute(payload: CreateUserModelDto): Promise<UserModelDto>;
 }
 
 export interface IRegisterRepository {
-  register(params: CreateUserModelDto): Promise<UserModelDto>;
+  register(payload: CreateUserModelDto): Promise<UserModelDto>;
 }

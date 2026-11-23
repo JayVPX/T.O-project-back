@@ -6,33 +6,35 @@ import type {
 } from "../../../models/user.model.js";
 
 export class PostgresRegisterRepository implements IRegisterRepository {
-  async register(params: CreateUserModelDto): Promise<UserModelDto> {
+  async register(payload: CreateUserModelDto): Promise<UserModelDto> {
     try {
       const { rows } = await PostgresClient.query(
         `
-        INSERT INTO 'USER' (
+        INSERT INTO "User" (
           cellphone,
           email,
           first_name,
           last_name,
-          password,
+          hash_password,
+          cpf,
           role
         )
-        VALUES ($1, $2, $3, $4, $5, $6)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING
           id,
           cellphone,
           email,
-          first_name,
-          last_name,
+          first_name || ' ' || last_name as name,
+          cpf,
           role
       `,
         [
-          params.cellphone,
-          params.email,
-          params.firstName,
-          params.lastName,
-          params.password,
+          payload.phone,
+          payload.email,
+          payload.firstName,
+          payload.lastName,
+          payload.password,
+          payload.cpf,
           "USER",
         ],
       );
@@ -45,10 +47,10 @@ export class PostgresRegisterRepository implements IRegisterRepository {
 
       return {
         id: user.id,
+        name: user.name,
         email: user.email,
-        cellphone: user.cellphone,
-        firstName: user.first_name,
-        lastName: user.last_name,
+        phone: user.phone,
+        cpf: user.cpf,
         role: user.role,
       };
     } catch (error) {
