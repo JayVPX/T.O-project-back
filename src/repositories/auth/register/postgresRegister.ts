@@ -1,5 +1,7 @@
 import type { IRegisterRepository } from "../../../controllers/auth/register/protocols.js";
 import { PostgresClient } from "../../../databases/postgree.js";
+import { AppError } from "../../../errors/appError.js";
+import { HttpStatusCode } from "../../../interfaces/http.js";
 import type {
   CreateUserModelDto,
   UserModelDto,
@@ -7,9 +9,8 @@ import type {
 
 export class PostgresRegisterRepository implements IRegisterRepository {
   async register(payload: CreateUserModelDto): Promise<UserModelDto> {
-    try {
-      const { rows } = await PostgresClient.query(
-        `
+    const { rows } = await PostgresClient.query(
+      `
         INSERT INTO "User" (
           cellphone,
           email,
@@ -28,34 +29,33 @@ export class PostgresRegisterRepository implements IRegisterRepository {
           cpf,
           role
       `,
-        [
-          payload.phone,
-          payload.email,
-          payload.firstName,
-          payload.lastName,
-          payload.password,
-          payload.cpf,
-          "USER",
-        ],
+      [
+        payload.phone,
+        payload.email,
+        payload.firstName,
+        payload.lastName,
+        payload.password,
+        payload.cpf,
+        "USER",
+      ],
+    );
+
+    const user = rows[0];
+
+    if (!user) {
+      throw new AppError(
+        "Falha ao registrar usuário",
+        HttpStatusCode.BAD_REQUEST,
       );
-
-      const user = rows[0];
-
-      if (!user) {
-        throw new Error("Nenhum usuário foi encontrado");
-      }
-
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        cpf: user.cpf,
-        role: user.role,
-      };
-    } catch (error) {
-      console.error("ERRO NO POSTGRES:", error);
-      throw error;
     }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      cpf: user.cpf,
+      role: user.role,
+    };
   }
 }

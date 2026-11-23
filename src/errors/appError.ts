@@ -1,7 +1,9 @@
-export class AppError extends Error {
-  public readonly statusCode: number;
+import type { HttpStatusCode } from "../interfaces/http.js";
 
-  constructor(message: string, statusCode: number = 500) {
+export class AppError extends Error {
+  public readonly statusCode: HttpStatusCode;
+
+  constructor(message: string, statusCode: HttpStatusCode = 500) {
     super(message);
 
     this.name = "AppError";

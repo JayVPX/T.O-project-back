@@ -7,6 +7,7 @@ import type {
 } from "../../../models/auth.model.js";
 import type { IHashProvider } from "../../../providers/hashProvider/argonHashProvider.js";
 import type { ITokenProvider } from "../../../providers/tokenProvider/jwtTokenProvider.js";
+import { HttpStatusCode } from "../../../interfaces/http.js";
 
 export class LoginUseCase implements ILoginUseCase {
   constructor(
@@ -21,7 +22,10 @@ export class LoginUseCase implements ILoginUseCase {
     const user = await this.userGetByEmail.findByEmail(email);
 
     if (!user) {
-      throw new AppError("Email ou senha inválidas", 401);
+      throw new AppError(
+        "Email ou senha inválidas",
+        HttpStatusCode.UNAUTHORIZED,
+      );
     }
 
     const passwordMatch = await this.hashProvider.compare(
@@ -30,7 +34,10 @@ export class LoginUseCase implements ILoginUseCase {
     );
 
     if (!passwordMatch) {
-      throw new AppError("Email ou senha inválidas", 401);
+      throw new AppError(
+        "Email ou senha inválidas",
+        HttpStatusCode.UNAUTHORIZED,
+      );
     }
 
     const accessToken = await this.tokenProvider.generate({

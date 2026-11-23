@@ -12,75 +12,127 @@ import { PostgresGetPatientAppointments } from "../repositories/appointments/get
 import { GetActiveAppointmentController } from "../controllers/appointments/get/getActiveAppointment.js";
 import { PostgresGetActiveAppointment } from "../repositories/appointments/get/postgresGetActive.js";
 import { GetActiveAppointmentUseCase } from "../services/appointments/get/getActiveAppointmentUseCase.js";
+import { HttpStatusCode } from "../interfaces/http.js";
+import { AppError } from "../errors/appError.js";
 
 const router = Router();
 
+// Create
 router.post("/create", async (req, res) => {
-  const createAppointmentRepository = new PostgresCreateAppointmentRepository();
-  const createAppointmentUseCase = new CreateAppointmentUseCase(
-    createAppointmentRepository,
-  );
-  const createAppointmentController = new CreateAppointmentController(
-    createAppointmentUseCase,
-  );
+  try {
+    const createAppointmentRepository =
+      new PostgresCreateAppointmentRepository();
+    const createAppointmentUseCase = new CreateAppointmentUseCase(
+      createAppointmentRepository,
+    );
+    const createAppointmentController = new CreateAppointmentController(
+      createAppointmentUseCase,
+    );
 
-  const response = await createAppointmentController.handle({ body: req.body });
+    const response = await createAppointmentController.handle({
+      body: req.body,
+    });
 
-  const { body, statusCode } = response;
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
+// Get All
 router.get("/get", async (req, res) => {
-  console.log("Chamou em");
-  const getActiveAppointmentRepository = new PostgresGetActiveAppointment();
-  const getActiveAppointmentUseCase = new GetActiveAppointmentUseCase(
-    getActiveAppointmentRepository,
-  );
-  const getActiveAppointmentController = new GetActiveAppointmentController(
-    getActiveAppointmentUseCase,
-  );
+  try {
+    const getActiveAppointmentRepository = new PostgresGetActiveAppointment();
+    const getActiveAppointmentUseCase = new GetActiveAppointmentUseCase(
+      getActiveAppointmentRepository,
+    );
+    const getActiveAppointmentController = new GetActiveAppointmentController(
+      getActiveAppointmentUseCase,
+    );
 
-  const response = await getActiveAppointmentController.handle();
-  const { body, statusCode } = response;
+    const response = await getActiveAppointmentController.handle();
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
+// Get One
 router.get("/get/:id", async (req, res) => {
-  const getOneAppointmentRepository = new PostgresGetOneAppointment();
-  const getOneAppointmentUseCase = new GetOneAppointmentUseCase(
-    getOneAppointmentRepository,
-  );
-  const getOneAppointmentController = new GetOneAppointmentController(
-    getOneAppointmentUseCase,
-  );
+  try {
+    const getOneAppointmentRepository = new PostgresGetOneAppointment();
+    const getOneAppointmentUseCase = new GetOneAppointmentUseCase(
+      getOneAppointmentRepository,
+    );
+    const getOneAppointmentController = new GetOneAppointmentController(
+      getOneAppointmentUseCase,
+    );
 
-  const response = await getOneAppointmentController.handle({
-    params: req.params.id,
-  });
+    const response = await getOneAppointmentController.handle({
+      params: req.params.id,
+    });
 
-  const { body, statusCode } = response;
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
+// Get Patient Appointments
 router.get("/patient/:id", async (req, res) => {
-  const getPatientAppointmentsRepository = new PostgresGetPatientAppointments();
-  const getPatientAppointmentsUseCase = new GetPatientAppointmentsUseCase(
-    getPatientAppointmentsRepository,
-  );
-  const getPatientAppointmentsController = new GetPatientAppointmentsController(
-    getPatientAppointmentsUseCase,
-  );
+  try {
+    const getPatientAppointmentsRepository =
+      new PostgresGetPatientAppointments();
+    const getPatientAppointmentsUseCase = new GetPatientAppointmentsUseCase(
+      getPatientAppointmentsRepository,
+    );
+    const getPatientAppointmentsController =
+      new GetPatientAppointmentsController(getPatientAppointmentsUseCase);
 
-  const response = await getPatientAppointmentsController.handle({
-    params: req.params.id,
-  });
+    const response = await getPatientAppointmentsController.handle({
+      params: req.params.id,
+    });
 
-  const { body, statusCode } = response;
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
 export default router;

@@ -1,4 +1,9 @@
-import type { HttpRequest, HttpResponse } from "../../../interfaces/http.js";
+import { AppError } from "../../../errors/appError.js";
+import {
+  HttpStatusCode,
+  type HttpRequest,
+  type HttpResponse,
+} from "../../../interfaces/http.js";
 import type {
   CreateUserModelDto,
   UserModelDto,
@@ -10,17 +15,15 @@ export class RegisterController implements IRegisterController {
   async handle(
     httpRequest: HttpRequest<CreateUserModelDto>,
   ): Promise<HttpResponse<UserModelDto>> {
-    try {
-      if (!httpRequest.body) {
-        return { body: "Insira os dados do usuário", statusCode: 400 };
-      }
-
-      const user = await this.registerUseCase.execute(httpRequest.body);
-
-      return { body: user, statusCode: 201 };
-    } catch (error) {
-      console.error("Ocorreu um erro na requisição:", error);
-      return { body: "Algo deu errado, tente novamente", statusCode: 500 };
+    if (!httpRequest.body) {
+      throw new AppError(
+        "Insira os dados do usuário",
+        HttpStatusCode.BAD_REQUEST,
+      );
     }
+
+    const user = await this.registerUseCase.execute(httpRequest.body);
+
+    return { body: user, statusCode: 201 };
   }
 }

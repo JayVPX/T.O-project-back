@@ -6,11 +6,10 @@ export class PostgresGetTherapistPatients implements IGetTherapistRepository {
   constructor() {}
 
   async getPatients(params: { id: string }): Promise<PatientDTO[]> {
-    try {
-      const { id } = params;
+    const { id } = params;
 
-      const { rows } = await PostgresClient.query(
-        `
+    const { rows } = await PostgresClient.query(
+      `
        SELECT
           p.id, p.name, p.birth_date, p.created_at, p.notes,
           pg.relationship_id,
@@ -30,28 +29,25 @@ export class PostgresGetTherapistPatients implements IGetTherapistRepository {
           AND a.therapist_id = $1
         )
         `,
-        [id],
-      );
+      [id],
+    );
 
-      const patients: PatientDTO[] = rows.map((p) => ({
-        id: p.id,
-        name: p.name,
-        birth_date: p.birth_date,
-        relationship: p.relationship_id,
-        notes: p.notes,
-        created_at: p.created_at,
-        responsible: {
-          id: p.responsible_id,
-          name: p.responsible_name,
-          email: p.email,
-          phone: p.cellphone,
-          address: p.address,
-        },
-      }));
+    const patients: PatientDTO[] = rows.map((p) => ({
+      id: p.id,
+      name: p.name,
+      birth_date: p.birth_date,
+      relationship: p.relationship_id,
+      notes: p.notes,
+      created_at: p.created_at,
+      responsible: {
+        id: p.responsible_id,
+        name: p.responsible_name,
+        email: p.email,
+        phone: p.cellphone,
+        address: p.address,
+      },
+    }));
 
-      return patients;
-    } catch (error) {
-      throw error;
-    }
+    return patients;
   }
 }

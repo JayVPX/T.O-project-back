@@ -1,5 +1,9 @@
 import { response } from "express";
-import type { HttpRequest, HttpResponse } from "../../../interfaces/http.js";
+import {
+  HttpStatusCode,
+  type HttpRequest,
+  type HttpResponse,
+} from "../../../interfaces/http.js";
 import type {
   LoginRequestDTO,
   LoginResponseDTO,
@@ -16,7 +20,10 @@ export class LoginController implements ILoginController {
     const { body } = httpRequest;
 
     if (!body) {
-      throw new AppError("Informe os dados necessário para o login", 400);
+      throw new AppError(
+        "Informe os dados necessário para o login",
+        HttpStatusCode.BAD_REQUEST,
+      );
     }
 
     const response = await this.loginUseCase.execute({

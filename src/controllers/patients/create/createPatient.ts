@@ -1,4 +1,9 @@
-import type { HttpRequest, HttpResponse } from "../../../interfaces/http.js";
+import { AppError } from "../../../errors/appError.js";
+import {
+  HttpStatusCode,
+  type HttpRequest,
+  type HttpResponse,
+} from "../../../interfaces/http.js";
 import type {
   CreatePatientDTO,
   PatientDTO,
@@ -14,24 +19,20 @@ export class CreatePatientController implements ICreatePatientController {
   async handle(
     httpRequest: HttpRequest<CreatePatientDTO>,
   ): Promise<HttpResponse<PatientDTO>> {
-    try {
-      const { body } = httpRequest;
+    const { body } = httpRequest;
 
-      if (!body) {
-        return {
-          body: "Body is required.",
-          statusCode: 400,
-        };
-      }
-
-      const patient = await this.createPatientUseCase.execute(body);
-
-      return {
-        body: patient,
-        statusCode: 201,
-      };
-    } catch (error) {
-      return { body: "Algo deu errado tente novamente", statusCode: 500 };
+    if (!body) {
+      throw new AppError(
+        "Preencha os dados necessários",
+        HttpStatusCode.BAD_REQUEST,
+      );
     }
+
+    const patient = await this.createPatientUseCase.execute(body);
+
+    return {
+      body: patient,
+      statusCode: 201,
+    };
   }
 }

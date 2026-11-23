@@ -17,94 +17,162 @@ import { GetUserPatientsController } from "../controllers/patients/get/getUserPa
 import { GetTherapistPatientsController } from "../controllers/patients/get/getTherapistPatients.js";
 import { PostgresGetTherapistPatients } from "../repositories/patients/get/postgresGetTherapist.js";
 import { GetTherapistUseCase } from "../services/patients/get/getTherapistPatientsUseCase.js";
+import { AppError } from "../errors/appError.js";
+import { HttpStatusCode } from "../interfaces/http.js";
 
 const router = Router();
 
 // Create
 router.post("/create", async (req, res) => {
-  const createRepository = new PostgresCreatePatient();
-  const createUseCase = new CreatePatientUseCase(createRepository);
-  const createController = new CreatePatientController(createUseCase);
+  try {
+    const createRepository = new PostgresCreatePatient();
+    const createUseCase = new CreatePatientUseCase(createRepository);
+    const createController = new CreatePatientController(createUseCase);
 
-  const response = await createController.handle({ body: req.body });
+    const response = await createController.handle({ body: req.body });
 
-  const { body, statusCode } = response;
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
 // GetOne
 router.get("/:id", async (req, res) => {
-  const getOneRepository = new PostgresGetOnePatient();
-  const getOneUseCase = new GetOnePatientUseCase(getOneRepository);
-  const getOneController = new GetOnePatientController(getOneUseCase);
+  try {
+    const getOneRepository = new PostgresGetOnePatient();
+    const getOneUseCase = new GetOnePatientUseCase(getOneRepository);
+    const getOneController = new GetOnePatientController(getOneUseCase);
 
-  const response = await getOneController.handle({ params: req.params.id });
-  const { body, statusCode } = response;
+    const response = await getOneController.handle({ params: req.params.id });
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
 // GetAll
 router.get("", async (req, res) => {
-  const getAllRepository = new PostgresGetAllPatients();
-  const getAllUseCase = new GetAllPatientUseCase(getAllRepository);
-  const getAllController = new GetAllPatientsController(getAllUseCase);
+  try {
+    const getAllRepository = new PostgresGetAllPatients();
+    const getAllUseCase = new GetAllPatientUseCase(getAllRepository);
+    const getAllController = new GetAllPatientsController(getAllUseCase);
 
-  const response = await getAllController.handle();
-  const { body, statusCode } = response;
+    const response = await getAllController.handle();
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
 // GetUserPatients
 router.get("/user/:id", async (req, res) => {
-  const getUserPatientsRepository = new PostgresGetUserPatients();
-  const getUserPatientsUseCase = new GetUserPatientsUseCase(
-    getUserPatientsRepository,
-  );
-  const getUserPatientsController = new GetUserPatientsController(
-    getUserPatientsUseCase,
-  );
+  try {
+    const getUserPatientsRepository = new PostgresGetUserPatients();
+    const getUserPatientsUseCase = new GetUserPatientsUseCase(
+      getUserPatientsRepository,
+    );
+    const getUserPatientsController = new GetUserPatientsController(
+      getUserPatientsUseCase,
+    );
 
-  const response = await getUserPatientsController.handle({
-    params: req.params.id,
-  });
-  const { body, statusCode } = response;
+    const response = await getUserPatientsController.handle({
+      params: req.params.id,
+    });
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
 // GetTherapistPatients
 router.get("/therapist/:id", async (req, res) => {
-  const getTherapistPatientsRepository = new PostgresGetTherapistPatients();
-  const getTherapistPatientsUseCase = new GetTherapistUseCase(
-    getTherapistPatientsRepository,
-  );
-  const getTherapistPatientsController = new GetTherapistPatientsController(
-    getTherapistPatientsUseCase,
-  );
+  try {
+    const getTherapistPatientsRepository = new PostgresGetTherapistPatients();
+    const getTherapistPatientsUseCase = new GetTherapistUseCase(
+      getTherapistPatientsRepository,
+    );
+    const getTherapistPatientsController = new GetTherapistPatientsController(
+      getTherapistPatientsUseCase,
+    );
 
-  const response = await getTherapistPatientsController.handle({
-    params: req.params.id,
-  });
+    const response = await getTherapistPatientsController.handle({
+      params: req.params.id,
+    });
 
-  const { body, statusCode } = response;
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
 // Delete
 router.delete("/:id", async (req, res) => {
-  const deleteRepository = new PostgresDeletePatient();
-  const deleteUseCase = new DeletePatientUseCase(deleteRepository);
-  const deleteController = new DeletePatientController(deleteUseCase);
+  try {
+    const deleteRepository = new PostgresDeletePatient();
+    const deleteUseCase = new DeletePatientUseCase(deleteRepository);
+    const deleteController = new DeletePatientController(deleteUseCase);
 
-  const response = await deleteController.handle({ params: req.params.id });
+    const response = await deleteController.handle({ params: req.params.id });
 
-  const { body, statusCode } = response;
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
 export default router;

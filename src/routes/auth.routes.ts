@@ -9,6 +9,7 @@ import { LoginUseCase } from "../services/auth/login/loginUseCase.js";
 import { PostgresFindByEmail } from "../repositories/user/findByEmail/postgresFindByEmail.js";
 import { JWTTokenProvider } from "../providers/tokenProvider/jwtTokenProvider.js";
 import { AppError } from "../errors/appError.js";
+import { HttpStatusCode } from "../interfaces/http.js";
 
 const router = Router();
 
@@ -19,13 +20,25 @@ const registerController = new RegisterController(registerUseCase);
 
 // Register
 router.post("/register", async (req, res) => {
-  const response = await registerController.handle({
-    body: req.body,
-  });
+  try {
+    const response = await registerController.handle({
+      body: req.body,
+    });
 
-  const { body, statusCode } = response;
+    const { body, statusCode } = response;
 
-  res.status(statusCode).send(body);
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
 });
 
 // SA
@@ -64,10 +77,12 @@ router.post("/login", async (req, res) => {
     console.error(error);
 
     if (error instanceof AppError) {
-      res.status(error.statusCode).json({ message: error.message });
+      return res.status(error.statusCode).json({ message: error.message });
     }
 
-    return res.status(500).json({ message: "Erro interno no servidor" });
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
   }
 });
 
