@@ -24,7 +24,7 @@ export class PostgresGetTherapistPatients implements IGetTherapistRepository {
 
         WHERE EXISTS (
           SELECT 1
-          FROM "Appointment" a
+          FROM public."Appointment" a
           WHERE a.patient_id = p.id
           AND a.therapist_id = $1
         )
