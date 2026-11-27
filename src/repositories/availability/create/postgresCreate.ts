@@ -13,7 +13,7 @@ export class PostgresCreateAvailability implements ICreateAvailabilityTherapistR
 
     const { rows } = await PostgresClient.query(
       `
-        INSERT INTO "TherapistSchedule" (
+        INSERT INTO public."TherapistSchedule" (
           therapist_id,
           weekday,
           start_time,

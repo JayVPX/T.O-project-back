@@ -9,7 +9,7 @@ export class PostgresFindAvailabilityConflict implements IFindConflictAvailabili
     const { rows } = await PostgresClient.query(
       `
         SELECT 1
-        FROM "TherapistSchedule"
+        FROM public."TherapistSchedule"
         WHERE therapist_id = $1
           AND weekday = $2
 

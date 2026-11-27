@@ -15,7 +15,7 @@ export class PostgresGetTherapistAppointmentsDate implements IGetTherapistAppoin
         SELECT
           start_at AS "startAt",
           end_at AS "endAt"
-        FROM "Appointment"
+        FROM public."Appointment"
         WHERE therapist_id = $1
           AND start_at < $3
           AND end_at > $2

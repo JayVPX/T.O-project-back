@@ -15,12 +15,12 @@ export class PostgresGetPatientAppointments implements IGetPatientAppointmentRep
       p.id as patient_id, p.name as patient_name,
       r.id as responsible_id, r.first_name || ' ' || r.last_name as responsible_name,
       t.id as therapist_id, t.first_name || ' ' || t.last_name as therapist_name 
-      FROM "Appointment" a
+      FROM public."Appointment" a
 
-      INNER JOIN "Patient" p ON p.id = a.patient_id
-      INNER JOIN "User" t ON  t.id = a.therapist_id
-      INNER JOIN "PatientGuardian" pg ON pg.patient_id = p.id
-      INNER JOIN "User" r ON  r.id = pg.responsible_id
+      INNER JOIN public."Patient" p ON p.id = a.patient_id
+      INNER JOIN public."User" t ON  t.id = a.therapist_id
+      INNER JOIN public."PatientGuardian" pg ON pg.patient_id = p.id
+      INNER JOIN public."User" r ON  r.id = pg.responsible_id
 
       WHERE p.id = $1
 

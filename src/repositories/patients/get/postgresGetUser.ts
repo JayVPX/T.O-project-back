@@ -10,12 +10,12 @@ export class PostgresGetUserPatients implements IGetUserPatientsRepository {
       `
         SELECT p.id as patient_id, p.birth_date, p.notes, p.created_at, p.name,
         pg.relationship_id, r.first_name || ' ' || r.last_name AS responsible_name, r.email, r.cellphone, r.id, r.address
-        FROM "User" r
+        FROM public."User" r
         
-        INNER JOIN "PatientGuardian" pg 
+        INNER JOIN public."PatientGuardian" pg 
         ON pg.responsible_id = r.id
 
-        INNER JOIN "Patient" p
+        INNER JOIN public."Patient" p
         ON p.id = pg.patient_id
 
         WHERE r.id = $1

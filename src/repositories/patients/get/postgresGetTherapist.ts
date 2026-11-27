@@ -14,12 +14,12 @@ export class PostgresGetTherapistPatients implements IGetTherapistRepository {
           p.id, p.name, p.birth_date, p.created_at, p.notes,
           pg.relationship_id,
           r.first_name || ' ' || r.last_name AS responsible_name, r.email, r.cellphone,r.id AS responsible_id,r.address
-        FROM "Patient" p
+        FROM public."Patient" p
 
-        INNER JOIN "PatientGuardian" pg
+        INNER JOIN public."PatientGuardian" pg
         ON pg.patient_id = p.id
 
-        INNER JOIN "User" r
+        INNER JOIN public."User" r
         ON r.id = pg.responsible_id
 
         WHERE EXISTS (

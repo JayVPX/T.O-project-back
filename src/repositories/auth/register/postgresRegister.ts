@@ -11,7 +11,7 @@ export class PostgresRegisterRepository implements IRegisterRepository {
   async register(payload: CreateUserModelDto): Promise<UserModelDto> {
     const { rows } = await PostgresClient.query(
       `
-        INSERT INTO "User" (
+        INSERT INTO public."User" (
           cellphone,
           email,
           first_name,

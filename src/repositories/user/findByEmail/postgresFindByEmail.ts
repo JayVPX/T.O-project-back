@@ -8,7 +8,7 @@ export class PostgresFindByEmail implements IFindByEmailRepository {
     const { rows } = await PostgresClient.query(
       `
         SELECT id, first_name || ' ' || last_name as name, cpf, email, cellphone, role, address, hash_password
-        FROM "User" 
+        FROM public."User" 
 
         WHERE email = $1
         `,

@@ -27,12 +27,12 @@ export class PostgresDeletePatient implements IDeletePatientRepository {
           r.first_name || ' ' || r.last_name AS responsible_name,
           r.address
 
-        FROM "Patient" p
+        FROM public."Patient" p
 
-        INNER JOIN "PatientGuardian" pg
+        INNER JOIN public."PatientGuardian" pg
           ON pg.patient_id = p.id
 
-        INNER JOIN "User" r
+        INNER JOIN public."User" r
           ON r.id = pg.responsible_id
 
         WHERE p.id = $1
@@ -49,7 +49,7 @@ export class PostgresDeletePatient implements IDeletePatientRepository {
       // 2. Deletar relacionamento
       await client.query(
         `
-        DELETE FROM "PatientGuardian"
+        DELETE FROM public."PatientGuardian"
         WHERE patient_id = $1
       `,
         [id],
@@ -58,7 +58,7 @@ export class PostgresDeletePatient implements IDeletePatientRepository {
       // 3. Deletar paciente
       await client.query(
         `
-        DELETE FROM "Patient"
+        DELETE FROM public."Patient"
         WHERE id = $1
       `,
         [id],

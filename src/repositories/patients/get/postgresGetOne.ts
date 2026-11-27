@@ -12,12 +12,12 @@ export class PostgresGetOnePatient implements IGetOnePatientRepository {
       `
           SELECT p.id, p.name, p.notes, p.birth_date, p.created_at, pg.relationship_id, r.id as responsible_id, r.email, r.cellphone,
           r.first_name || ' ' || r.last_name as responsible_name, r.address
-          FROM "Patient" p
+          FROM public."Patient" p
 
-          INNER JOIN "PatientGuardian" pg 
+          INNER JOIN public."PatientGuardian" pg 
           ON pg.patient_id = p.id
           
-          INNER JOIN "User" r
+          INNER JOIN public."User" r
           ON r.id = pg.responsible_id
           
           WHERE p.id = $1
