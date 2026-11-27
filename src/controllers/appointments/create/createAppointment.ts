@@ -1,4 +1,9 @@
-import type { HttpRequest, HttpResponse } from "../../../interfaces/http.js";
+import { AppError } from "../../../errors/appError.js";
+import {
+  HttpStatusCode,
+  type HttpRequest,
+  type HttpResponse,
+} from "../../../interfaces/http.js";
 import type {
   CreateAppointmentDTO,
   AppointmentDTO,
@@ -16,23 +21,19 @@ export class CreateAppointmentController implements ICreateAppointmentController
   async handle(
     httpRequest: HttpRequest<CreateAppointmentDTO>,
   ): Promise<HttpResponse<AppointmentDTO>> {
-    try {
-      const { body } = httpRequest;
+    const { body } = httpRequest;
 
-      if (!body) {
-        return {
-          body: "Body is required.",
-          statusCode: 400,
-        };
-      }
-      const appointment = await this.createAppointmentUseCase.execute(body);
-
-      return {
-        body: appointment,
-        statusCode: 201,
-      };
-    } catch (error) {
-      return { body: "Something went wrong.", statusCode: 500 };
+    if (!body) {
+      throw new AppError(
+        "Insira os dados necessários",
+        HttpStatusCode.BAD_REQUEST,
+      );
     }
+    const appointment = await this.createAppointmentUseCase.execute(body);
+
+    return {
+      body: appointment,
+      statusCode: HttpStatusCode.CREATED,
+    };
   }
 }

@@ -6,17 +6,23 @@ import type {
 } from "../../../models/appointments.model.js";
 
 export class PostgresCreateAppointmentRepository implements ICreateAppointmentRepository {
-  async create(params: CreateAppointmentDTO): Promise<AppointmentDTO> {
+  async create(payload: CreateAppointmentDTO): Promise<AppointmentDTO> {
+    const client = await PostgresClient.connect();
     try {
-      const insertAppointment = await PostgresClient.query(
-        `INSERT INTO "Appointment"(scheduled_at, patient_id, therapist_id) VALUES ($1, $2, $3) RETURNING id`,
-        [params.scheduledAt, params.patientId, params.therapistId],
+      const { endAt, modality, patientId, startAt, therapistId } = payload;
+
+      await client.query(`BEGIN`);
+
+      const insertAppointment = await client.query(
+        `INSERT INTO "Appointment"(start_at, end_at, modality, patient_id, therapist_id) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+        [startAt, endAt, modality, patientId, therapistId],
       );
 
       const appointmentId = insertAppointment.rows[0].id;
 
-      const appointmentResult = await PostgresClient.query(
-        `SELECT a.id, a.scheduled_at, a.status, p.id as patient_id, p.first_name || ' ' || p.last_name as patient_name, 
+      const appointmentResult = await client.query(
+        `SELECT a.id, a.status, a.created_at, a.updated_at, a.start_at, a.end_at, a.modality, a.notes,
+        p.id as patient_id, p.name as patient_name, 
         t.id as therapist_id, t.first_name || ' ' || t.last_name as therapist_name, 
         r.id as responsible_id, r.first_name || ' ' || r.last_name as responsible_name FROM "Appointment" a
 
@@ -39,10 +45,17 @@ export class PostgresCreateAppointmentRepository implements ICreateAppointmentRe
 
       const appointment = appointmentResult.rows[0];
 
+      await client.query(`COMMIT`);
+
       return {
         id: appointment.id,
-        scheduleAt: appointment.scheduled_at,
+        startAt: appointment.start_at,
+        endAt: appointment.end_at,
+        modality: appointment.modality,
         status: appointment.status,
+        notes: appointment.notes,
+        createdAt: appointment.created_at,
+        updatedAt: appointment.updated_at,
         responsible: {
           id: appointment.responsible_id,
           name: appointment.responsible_name,
@@ -57,8 +70,10 @@ export class PostgresCreateAppointmentRepository implements ICreateAppointmentRe
         },
       };
     } catch (error) {
-      console.error("Erro no PostgreSQL: ", error);
+      await client.query("ROLLBACK");
       throw error;
+    } finally {
+      client.release();
     }
   }
 }

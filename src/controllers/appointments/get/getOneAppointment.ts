@@ -1,4 +1,8 @@
-import type { HttpRequest, HttpResponse } from "../../../interfaces/http.js";
+import {
+  HttpStatusCode,
+  type HttpRequest,
+  type HttpResponse,
+} from "../../../interfaces/http.js";
 import type { AppointmentDTO } from "../../../models/appointments.model.js";
 import type {
   IGetOneAppointmentController,
@@ -11,13 +15,9 @@ export class GetOneAppointmentController implements IGetOneAppointmentController
   async handle(
     httpRequest: HttpRequest<any>,
   ): Promise<HttpResponse<AppointmentDTO>> {
-    try {
-      const { params } = httpRequest;
-      const appointment = await this.getOneUseCase.execute({ id: params });
+    const { params } = httpRequest;
+    const appointment = await this.getOneUseCase.execute({ id: params });
 
-      return { body: appointment, statusCode: 200 };
-    } catch (error) {
-      return { body: "Something went wrong", statusCode: 500 };
-    }
+    return { body: appointment, statusCode: HttpStatusCode.OK };
   }
 }

@@ -1,5 +1,4 @@
 import type {
-  IGetAllAppointmentRepository,
   IGetOneAppointmentRepository,
   IGetOneAppointmentUseCase,
 } from "../../../controllers/appointments/get/protocols.js";

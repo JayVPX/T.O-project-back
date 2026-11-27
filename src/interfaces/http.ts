@@ -6,6 +6,7 @@ export interface HttpResponse<B> {
 export interface HttpRequest<T> {
   params?: any;
   headers?: any;
+  query?: any;
   body?: T;
 }
 

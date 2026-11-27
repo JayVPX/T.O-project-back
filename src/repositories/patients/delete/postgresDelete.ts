@@ -24,7 +24,7 @@ export class PostgresDeletePatient implements IDeletePatientRepository {
           r.id AS responsible_id,
           r.email,
           r.cellphone,
-          r.first_name || ' ' || r.last_name AS responsible_name
+          r.first_name || ' ' || r.last_name AS responsible_name,
           r.address
 
         FROM "Patient" p

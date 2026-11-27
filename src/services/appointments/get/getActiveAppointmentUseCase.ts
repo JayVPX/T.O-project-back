@@ -10,8 +10,8 @@ export class GetActiveAppointmentUseCase implements IGetActiveAppointmentUseCase
   ) {}
 
   async execute(): Promise<AppointmentDTO[]> {
-    const appointment = await this.getActiveRepository.getActive();
+    const appointments = await this.getActiveRepository.getActive();
 
-    return appointment;
+    return appointments;
   }
 }

@@ -14,6 +14,12 @@ import { PostgresGetActiveAppointment } from "../repositories/appointments/get/p
 import { GetActiveAppointmentUseCase } from "../services/appointments/get/getActiveAppointmentUseCase.js";
 import { HttpStatusCode } from "../interfaces/http.js";
 import { AppError } from "../errors/appError.js";
+import { GetResponsibleAppointmentsController } from "../controllers/appointments/get/getResponsibleAppointments.js";
+import { PostgresGetResponsibleAppointments } from "../repositories/appointments/get/postgresGetResponsibleAppointments.js";
+import { GetResponsibleAppointmentsUseCase } from "../services/appointments/get/getResponsibleAppointmentUseCase.js";
+import { PostgresGetTherapistAppointments } from "../repositories/appointments/get/postgresGetTherapistAppointment.js";
+import { GetTherapistAppointmentsUseCase } from "../services/appointments/get/getTherapistAppointmentUseCase.js";
+import { GetTherapistAppointmentsController } from "../controllers/appointments/get/getTherapistAppointments.js";
 
 const router = Router();
 
@@ -129,6 +135,64 @@ router.get("/patient/:id", async (req, res) => {
       return res.status(error.statusCode).json({ message: error.message });
     }
 
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
+});
+
+// Get Responsible Appointments
+router.get("/user/:id", async (req, res) => {
+  try {
+    const getResponsibleRepository = new PostgresGetResponsibleAppointments();
+    const getResponsibleUseCase = new GetResponsibleAppointmentsUseCase(
+      getResponsibleRepository,
+    );
+    const getResponsibleController = new GetResponsibleAppointmentsController(
+      getResponsibleUseCase,
+    );
+
+    const response = await getResponsibleController.handle({
+      params: req.params.id,
+    });
+
+    const { body, statusCode } = response;
+
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res
+      .status(HttpStatusCode.SERVER_ERROR)
+      .json({ message: "Erro interno no servidor" });
+  }
+});
+
+// Get Therapist Appointments
+router.get("/therapist/:id", async (req, res) => {
+  try {
+    const getTherapistRepository = new PostgresGetTherapistAppointments();
+    const getTherapistUseCase = new GetTherapistAppointmentsUseCase(
+      getTherapistRepository,
+    );
+    const getTherapistController = new GetTherapistAppointmentsController(
+      getTherapistUseCase,
+    );
+
+    const response = await getTherapistController.handle({
+      params: req.params.id,
+    });
+    const { body, statusCode } = response;
+
+    res.status(statusCode).send(body);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
     return res
       .status(HttpStatusCode.SERVER_ERROR)
       .json({ message: "Erro interno no servidor" });
